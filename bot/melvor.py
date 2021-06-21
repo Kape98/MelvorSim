@@ -6,7 +6,6 @@ from monsterlist import monsterDic, aliases
 
 client = commands.Bot(command_prefix=';')
 
-
 currentMonster = {}
 droplist = []
 
