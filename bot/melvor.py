@@ -2,7 +2,7 @@ import discord
 import random
 import numpy as np
 from discord.ext import commands
-from monsterlist import monsterDic, aliases
+from monsterlist import monsterDic
 
 client = commands.Bot(command_prefix=';')
 
@@ -25,6 +25,8 @@ async def slay(ctx, monster, attempts):
         odds = random.uniform(0.00, 100.0)
         droplist.append(np.random.choice(monsterDic.keys(), attempts, replace=True, p=monsterDic.values()))
         print(droplist)
+        await ctx.send(droplist)
+
         return
 
 
