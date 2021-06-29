@@ -1,32 +1,37 @@
 import discord
-import random
 import numpy as np
 from discord.ext import commands
-from monsterlist import monsterDic
+import slayertools
 
 client = commands.Bot(command_prefix=';')
 
-currentMonster = {}
 droplist = []
-attempts = 10
+
 
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
 
 
-@client.command
-async def slay(ctx, monster, attempts):
-    #if monster < 0 or monster > 2:
-     #   print('invalid monster')
-      #  return
+@client.command()
+async def slay(ctx, monster_name, attempts):
+    if int(attempts) > 10000:
+        await ctx.send("Don't kill my pc pls")
+        return
 
-    for i in range(attempts):
-        droplist.append(np.random.choice(monsterDic.keys(), attempts, replace=True, p=monsterDic.values()))
-        print(droplist)
-        #await ctx.send(droplist)
+    loot_table, always_drops = slayertools.get_monsterloot_table(monster_name)
 
+    chances = np.array(loot_table['Chance.1'])
+    chances /= chances.sum()
 
+    for i in range(int(attempts)):
+
+        droplist.append(np.random.choice(loot_table['Item'], p=chances))
+        droplist.append(always_drops.iat[0, 0])
+
+    neat = slayertools.neat_table(droplist)
+    await ctx.send("```yaml\n" + neat + "\n```")
+    droplist.clear()
 
 
 client.run('ODU2Mjc4MTAwNzE4NTE4MzAy.YM-tIA.jJ9AyjhqP0pbJhKaiUD-JqRk1Z8')
