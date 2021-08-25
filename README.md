@@ -1,2 +1,2 @@
 # MelvorSim
-Simulates combat drops from MelvorIdle
+A Discord bot that simulates combat drops from MelvorIdle
